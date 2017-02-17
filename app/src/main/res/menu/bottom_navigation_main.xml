@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/banks"
+        android:enabled="true"
+        android:icon="@drawable/ic_banks_24dp"
+        android:title="@string/banks"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/average_today"
+        android:enabled="true"
+        android:icon="@drawable/ic_average_today_24dp"
+        android:title="@string/average_today"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/by_dates"
+        android:enabled="true"
+        android:icon="@drawable/ic_by_dates_24dp"
+        android:title="@string/by_dates"
+        app:showAsAction="ifRoom" />
+</menu>
