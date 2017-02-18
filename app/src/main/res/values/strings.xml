@@ -29,9 +29,15 @@
         <item>Interbank</item>
     </string-array>
 
-    <string-array name="periods_array">
+    <string-array name="periods_strings">
         <item>Last 3 day</item>
         <item>Last 5 day</item>
         <item>Last 10 day</item>
     </string-array>
+
+    <integer-array name="periods_int">
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+    </integer-array>
 </resources>

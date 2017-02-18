@@ -6,10 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 import androks.rate.R;
 import androks.rate.api.CurrencyManager;
@@ -17,6 +21,7 @@ import androks.rate.api.Utils;
 import androks.rate.api.data.Average;
 import androks.rate.api.data.Today;
 import androks.rate.api.model.CurrencyType;
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -26,7 +31,6 @@ import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
-import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
@@ -35,20 +39,13 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class ByDatesFragment extends Fragment implements CurrencyManager.Listener {
 
-
-    private HashMap<String, CurrencyType> mValues;
-    private int numberOfLines = 1;
-    private int maxNumberOfLines = 4;
-    private int numberOfPoints = 12;
-
-    float[][] randomNumbersTab = new float[maxNumberOfLines][numberOfPoints];
-
-
     private Unbinder unbinder;
+    private HashMap<String, CurrencyType> mValues;
+    @BindView(R.id.chart) LineChartView mChart;
+    @BindArray(R.array.periods_int) int[] mPeriods;
+    Spinner spinner;
 
-    @BindView(R.id.chart)
-    LineChartView mChart;
-    private LineChartData data;
+    private int mNumberOfPoints;
 
     @Nullable
     @Override
@@ -56,10 +53,19 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
         View rootView = inflater.inflate(R.layout.fragment_by_dates, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        // Generate some random values.
-        generateValues();
-        generateData();
-        resetViewport();
+        mNumberOfPoints = mPeriods[0];
+        spinner = (Spinner) getActivity().findViewById(R.id.period_spinner);
+        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mNumberOfPoints = mPeriods[i];
+                //generateData();
+            }
+        });
+
+
+        //generateData();
+        //resetViewport();
 
         CurrencyManager.with(this).updateAverage();
         return rootView;
@@ -77,44 +83,34 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
         v.bottom = 0;
         v.top = 100;
         v.left = 0;
-        v.right = numberOfPoints - 1;
+        v.right = mNumberOfPoints - 1;
         mChart.setMaximumViewport(v);
         mChart.setCurrentViewport(v);
-    }
-
-    private void generateValues() {
-        for (int i = 0; i < maxNumberOfLines; ++i) {
-            for (int j = 0; j < numberOfPoints; ++j) {
-                randomNumbersTab[i][j] = (float) Math.random() * 100f;
-            }
-        }
     }
 
     private void generateData() {
 
         ValueShape shape = ValueShape.CIRCLE;
 
-        List<Line> lines = new ArrayList<>();
-        for (int i = 0; i < numberOfLines; ++i) {
+        Line line = new Line();
 
-            List<PointValue> values = new ArrayList<>();
-            for (int j = 0; j < numberOfPoints; ++j) {
-                values.add(new PointValue(j, randomNumbersTab[i][j]));
-            }
+        List<PointValue> values = new ArrayList<>();
+//        for (int j = 0; j < mNumberOfPoints; ++j) {
+//            values.add(new PointValue(j, randomNumbersTab[i][j]));
+//        }
 
-            Line line = new Line(values);
-            line.setColor(ChartUtils.COLORS[i]);
-            line.setShape(shape);
-            line.setCubic(true);
-            line.setFilled(true);
-            line.setHasLabels(false);
-            line.setHasLabelsOnlyForSelected(true);
-            line.setHasLines(true);
-            line.setHasPoints(true);
-            lines.add(line);
-        }
+//        Line line = new Line(values);
+//        line.setColor(ChartUtils.COLORS[i]);
+        line.setShape(shape);
+        line.setCubic(true);
+        line.setFilled(true);
+        line.setHasLabels(false);
+        line.setHasLabelsOnlyForSelected(true);
+        line.setHasLines(true);
+        line.setHasPoints(true);
 
-        data = new LineChartData(lines);
+
+        LineChartData data = new LineChartData();
 
         Axis axisX = new Axis();
         Axis axisY = new Axis().setHasLines(true);
@@ -136,7 +132,17 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
 
     @Override
     public void onAverageReady(Average average) {
-        mValues = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR);
+
+        convertToStack(average);
+        generateData();
+    }
+
+    private void convertToStack(Average average) {
+        HashMap<String, CurrencyType> mValues = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR);
+        Set<String> dates = mValues.keySet();
+
+        Stack<CurrencyType> stack = new Stack<>();
+
     }
 
     @Override
