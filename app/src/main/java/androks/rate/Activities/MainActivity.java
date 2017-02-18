@@ -12,13 +12,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Calendar;
+import java.util.List;
+
 import androks.rate.Fragments.AverageTodayFragment;
 import androks.rate.Fragments.BanksFragment;
 import androks.rate.Fragments.ByDatesFragment;
 import androks.rate.R;
 import androks.rate.api.CurrencyManager;
+import androks.rate.api.Pair;
 import androks.rate.api.Utils;
 import androks.rate.api.data.Average;
+import androks.rate.api.data.Banks;
 import androks.rate.api.data.Today;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
     public void testRequest(View view) {
         CurrencyManager.with(this).updateToday();
         CurrencyManager.with(this).updateAverage();
+        CurrencyManager.with(this).updateBanks();
     }
 
     @Override
@@ -63,12 +69,15 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
 
     @Override
     public void onAverageReady(Average average) {
-        System.out.println(average.getAverageCurrencyTypeByDate(Utils.CURRENCY_DOLLAR, "2017-02-16").average.getValue());
+        System.out.println(average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR).get(0).calendar);
     }
 
     @Override
-    public void onBanksReady() {
-
+    public void onBanksReady(Banks banks) {
+        List<Pair> pairs = banks.getCurrencyTypeListByPeriod(Utils.CURRENCY_DOLLAR, 5);
+        for (Pair p: pairs) {
+            System.out.println(p.calendar.get(Calendar.DAY_OF_MONTH));
+        }
     }
 
     private void setOnNavigationItemSelectListener() {
