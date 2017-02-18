@@ -2,6 +2,7 @@ package androks.rate.Activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,11 +16,14 @@ import androks.rate.Fragments.AverageTodayFragment;
 import androks.rate.Fragments.BanksFragment;
 import androks.rate.Fragments.ByDatesFragment;
 import androks.rate.R;
-import androks.rate.api.CurrencyManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String APP_BAR_FOR_BANKS_VIEW = "APP_BAR_FOR_BANKS_VIEW";
+    private static final String APP_BAR_FOR_AVERAGE_TODAY_VIEW = "APP_BAR_FOR_AVERAGE_TODAY_VIEW";
+    private static final String APP_BAR_FOR_BY_DATES_VIEW = "APP_BAR_FOR_BY_DATES_VIEW";
 
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -27,11 +31,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.bottom_navigation)
-    BottomNavigationView bottomNavigationView;
-
-    @BindView(R.id.toolbar_banks)
-    View banksToolbar;
+    @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
+    @BindView(R.id.toolbar_banks) View banksToolbar;
+    @BindView(R.id.appBar) AppBarLayout mAppBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +58,17 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.banks:
-                                banksToolbar.setVisibility(View.VISIBLE);
+                                ButterKnife.apply(mAppBarLayout, SET_TOOLBAR_FOR, APP_BAR_FOR_BANKS_VIEW);
                                 fragment = new BanksFragment();
                                 break;
 
                             case R.id.by_dates:
-                                banksToolbar.setVisibility(View.GONE);
+                                ButterKnife.apply(mAppBarLayout, SET_TOOLBAR_FOR, APP_BAR_FOR_BY_DATES_VIEW);
                                 fragment = new ByDatesFragment();
                                 break;
 
                             case R.id.average_today:
-                                banksToolbar.setVisibility(View.GONE);
+                                ButterKnife.apply(mAppBarLayout, SET_TOOLBAR_FOR, APP_BAR_FOR_AVERAGE_TODAY_VIEW);
                                 fragment = new AverageTodayFragment();
                                 break;
                         }
@@ -84,4 +86,24 @@ public class MainActivity extends AppCompatActivity {
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container, fragment).commit();
     }
+
+    static final ButterKnife.Setter<View, String> SET_TOOLBAR_FOR = new ButterKnife.Setter<View, String>() {
+        @Override public void set(@NonNull View view, String value, int index) {
+            switch (value){
+                case APP_BAR_FOR_BANKS_VIEW:
+                    view.findViewById(R.id.toolbar_banks).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.toolbar_period).setVisibility(View.GONE);
+                    break;
+                case APP_BAR_FOR_AVERAGE_TODAY_VIEW:
+                    view.findViewById(R.id.toolbar_banks).setVisibility(View.GONE);
+                    view.findViewById(R.id.toolbar_period).setVisibility(View.GONE);
+                    break;
+
+                case APP_BAR_FOR_BY_DATES_VIEW:
+                    view.findViewById(R.id.toolbar_banks).setVisibility(View.GONE);
+                    view.findViewById(R.id.toolbar_period).setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+    };
 }

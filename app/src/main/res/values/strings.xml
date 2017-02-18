@@ -28,4 +28,11 @@
         <item>Black market</item>
         <item>Interbank</item>
     </string-array>
+
+    <string-array name="periods_array">
+        <item>Last day</item>
+        <item>Last 3 day</item>
+        <item>Last 5 day</item>
+        <item>Last 10 day</item>
+    </string-array>
 </resources>
