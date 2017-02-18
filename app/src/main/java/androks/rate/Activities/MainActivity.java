@@ -16,10 +16,13 @@ import androks.rate.Fragments.BanksFragment;
 import androks.rate.Fragments.ByDatesFragment;
 import androks.rate.R;
 import androks.rate.api.CurrencyManager;
+import androks.rate.api.Utils;
+import androks.rate.api.data.Average;
+import androks.rate.api.data.Today;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CurrencyManager.Listener{
 
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -46,7 +49,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void testRequest(View view) {
-        CurrencyManager.with(null).updateAverage();
+        CurrencyManager.with(this).updateToday();
+        CurrencyManager.with(this).updateAverage();
+    }
+
+    @Override
+    public void onTodayReady(Today today) {
+        System.out.println(today.getDollar().get(Utils.CURRENCY_TYPE_AVERAGE).average.getValue());
+    }
+
+    @Override
+    public void onAverageReady(Average average) {
+        System.out.println(average.getAverageCurrencyTypeByDate(Utils.CURRENCY_DOLLAR, "2017-02-16").average.getValue());
+    }
+
+    @Override
+    public void onBanksReady() {
+
     }
 
     private void setOnNavigationItemSelectListener() {
