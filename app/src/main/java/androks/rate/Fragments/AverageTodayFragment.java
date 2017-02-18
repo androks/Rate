@@ -17,6 +17,7 @@ import androks.rate.R;
 import androks.rate.api.CurrencyManager;
 import androks.rate.api.Utils;
 import androks.rate.api.data.Average;
+import androks.rate.api.data.Banks;
 import androks.rate.api.data.Today;
 import androks.rate.api.model.CurrencyType;
 import androks.rate.api.model.CurrencyValue;
@@ -99,7 +100,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     }
 
     @Override
-    public void onBanksReady() {
+    public void onBanksReady(Banks banks) {
 
     }
 }
