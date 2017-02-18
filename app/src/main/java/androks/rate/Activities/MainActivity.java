@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void testTodayRequest(View view) {
-        CurrencyManager.getManager().getToday();
-    }
+//    public void testRequest(View view) {
+//        CurrencyManager.with(null).getToday();
+//    }
 
     private void setOnNavigationItemSelectListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(

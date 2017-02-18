@@ -11,7 +11,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class CurrencyValue {
 	@SerializedName("value")
-	public String value;
+	private String value;
 	@SerializedName("diff")
-	public float diff;
+	private float diff;
+
+	public float getValue() {
+		return Float.valueOf(value);
+	}
+
+	public float getDiff() {
+		return diff;
+	}
+
 }

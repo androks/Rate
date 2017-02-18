@@ -62,16 +62,6 @@ public class ApiManager {
 			public void onResponse(Call<ResponseToday> call, Response<ResponseToday> response) {
 				Log.d(TAG, "onResponse");
 
-				try {
-					Log.d(TAG, "null: " + (response.body() == null));
-					Log.d(TAG, "null: " + (response.body().data == null));
-					Log.d(TAG, "null: " + (response.body().data.isEmpty()));
-					HashMap<String, HashMap<String, CurrencyType>> data = response.body().data;
-					Log.d(TAG, data.get("840").get("buy").average.value);
-				}catch (RuntimeException e) {
-					e.printStackTrace();
-				}
-
 				ResponseToday responseToday = response.body();
 				if (responseToday != null && responseToday.status.equals(Utils.STATUS_SUCCESS)) {
 					listener.onTodayReady(responseToday.data);
@@ -96,13 +86,6 @@ public class ApiManager {
 			@Override
 			public void onResponse(Call<ResponseAverage> call, Response<ResponseAverage> response) {
 				Log.d(TAG, "onResponse");
-
-				try {
-					Log.d(TAG, "null: " + (response.body() == null));
-					Log.d(TAG, "null: " + (response.body().data == null));
-				}catch (RuntimeException e) {
-					e.printStackTrace();
-				}
 
 				ResponseAverage responseAverage = response.body();
 				if (responseAverage != null &&
@@ -129,13 +112,6 @@ public class ApiManager {
 			@Override
 			public void onResponse(Call<ResponseBanks> call, Response<ResponseBanks> response) {
 				Log.d(TAG, "onResponse");
-
-				try {
-					Log.d(TAG, "null: " + (response.body() == null));
-					Log.d(TAG, "null: " + (response.body().data == null));
-				}catch (RuntimeException e) {
-					e.printStackTrace();
-				}
 
 				ResponseBanks responseBanks = response.body();
 				if (responseBanks != null &&
