@@ -13,7 +13,6 @@ import java.util.Locale;
 import androks.rate.R;
 import androks.rate.api.Utils;
 import androks.rate.api.model.BankItem;
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -25,11 +24,6 @@ public class BanksListViewAdapter extends RecyclerView.Adapter<BanksListViewAdap
 
     private List<BankItem> mValues;
     private Context context;
-
-    @BindColor(android.R.color.holo_red_dark)
-    int red;
-    @BindColor(android.R.color.holo_green_light)
-    int green;
 
     public BanksListViewAdapter(Context context, List<BankItem> banks) {
         this.context = context;
@@ -59,11 +53,6 @@ public class BanksListViewAdapter extends RecyclerView.Adapter<BanksListViewAdap
         holder.mBank.setText(Utils.getFriendlyBankTitle(context, bankItem.getBankId()));
         holder.mAsk.setText(String.format(Locale.getDefault(), "%.2f",  bankItem.getSale()));
         holder.mBid.setText(String.format(Locale.getDefault(),"%.2f", bankItem.getBuy()));
-        holder.mAskDiff.setText(String.format(Locale.getDefault(),"%.3f", bankItem.getSaleDiff()));
-        holder.mAskDiff.setTextColor(bankItem.getSaleDiff() > 0? green: red);
-//        holder.mBidDiff.setText(String.format(Locale.getDefault(),"%.3f",bankItem.getBuyDiff()));
-//        holder.mBidDiff.setText("sdgsdg");
-//        holder.mBidDiff.setTextColor(bankItem.getSaleDiff() > 0? green: red);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,7 +65,5 @@ public class BanksListViewAdapter extends RecyclerView.Adapter<BanksListViewAdap
         @BindView(R.id.bank_title) TextView mBank;
         @BindView(R.id.ask) TextView mAsk;
         @BindView(R.id.bid) TextView mBid;
-        @BindView(R.id.ask_diff) TextView mAskDiff;
-        @BindView(R.id.bid_diff) TextView mBidDiff;
     }
 }

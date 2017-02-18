@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.AppCompat.Button.Borderless"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="8dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp">
+    android:orientation="horizontal"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/bank_title"
         style="@android:style/TextAppearance.DeviceDefault.SearchResult.Title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/bid"
-        android:layout_toStartOf="@+id/bid"
+        android:layout_weight="10"
         android:ellipsize="end"
         tools:text="Privatbank" />
 
@@ -27,13 +21,9 @@
         style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/bank_title"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentRight="false"
-        android:layout_toLeftOf="@+id/ask"
-        android:layout_toStartOf="@+id/ask"
-        android:paddingEnd="24dp"
-        android:paddingRight="24dp"
+        android:gravity="center"
+        android:paddingEnd="16dp"
+        android:paddingRight="16dp"
         tools:text="25.87" />
 
     <TextView
@@ -41,26 +31,9 @@
         style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/bank_title"
-        android:layout_alignParentRight="true"
+        android:gravity="center"
         tools:text="26.00" />
 
-    <TextView
-        android:id="@+id/bid_diff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/bid"
-        android:layout_alignRight="@+id/bid"
-        android:layout_below="@+id/bid"
-        android:paddingRight="24dp"
-        tools:text="-0.54" />
 
-    <TextView
-        android:id="@+id/ask_diff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/ask"
-        android:layout_below="@+id/ask"
-        android:text="+005" />
-</RelativeLayout>
+</LinearLayout>
 

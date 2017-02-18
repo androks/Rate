@@ -33,7 +33,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
     private List<BankItem> mBankList;
     private Unbinder unbinder;
 
-    @BindView(R.id.banksLV) RecyclerView mBanksRecyclerView;
+    @BindView(R.id.banksRV) RecyclerView mBanksRecyclerView;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_banks, container, false);
