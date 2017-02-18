@@ -16,10 +16,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import androks.rate.R;
-import androks.rate.api.CurrencyManager;
-import androks.rate.api.Utils;
 import androks.rate.api.data.Average;
-import androks.rate.api.data.Today;
 import androks.rate.api.model.CurrencyType;
 import butterknife.BindArray;
 import butterknife.BindView;
@@ -37,7 +34,7 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by androks on 2/17/2017.
  */
 
-public class ByDatesFragment extends Fragment implements CurrencyManager.Listener {
+public class ByDatesFragment extends Fragment {
 
     private Unbinder unbinder;
     private HashMap<String, CurrencyType> mValues;
@@ -66,8 +63,6 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
 
         //generateData();
         //resetViewport();
-
-        CurrencyManager.with(this).updateAverage();
         return rootView;
     }
 
@@ -125,28 +120,10 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
 
     }
 
-    @Override
-    public void onTodayReady(Today today) {
-        //Nothing
-    }
-
-    @Override
-    public void onAverageReady(Average average) {
-
-        convertToStack(average);
-        generateData();
-    }
-
     private void convertToStack(Average average) {
-        HashMap<String, CurrencyType> mValues = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR);
         Set<String> dates = mValues.keySet();
 
         Stack<CurrencyType> stack = new Stack<>();
-
-    }
-
-    @Override
-    public void onBanksReady() {
 
     }
 }
