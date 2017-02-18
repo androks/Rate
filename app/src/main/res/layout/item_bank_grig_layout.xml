@@ -6,7 +6,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        style="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:id="@+id/bank"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,16 +18,16 @@
         android:id="@+id/ask"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:gravity="center"
-        tools:text="Ask" />
+        tools:text="Ask"/>
 
     <TextView
         style="@style/TextAppearance.AppCompat.Medium"
         android:id="@+id/bid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:gravity="center"
-        tools:text="Bid" />
+        tools:text="Bid"/>
 </LinearLayout>
