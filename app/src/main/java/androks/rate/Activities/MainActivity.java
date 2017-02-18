@@ -15,6 +15,7 @@ import androks.rate.Fragments.AverageTodayFragment;
 import androks.rate.Fragments.BanksFragment;
 import androks.rate.Fragments.ByDatesFragment;
 import androks.rate.R;
+import androks.rate.api.CurrencyManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -43,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         setOnNavigationItemSelectListener();
         setMainFragment();
     }
+
+//    public void testRequest(View view) {
+//        CurrencyManager.with(null).getToday();
+//    }
 
     private void setOnNavigationItemSelectListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(
