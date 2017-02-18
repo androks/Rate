@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         boolean changeFragment = false;
                         switch (item.getItemId()){
+
                             case R.id.banks:
                                 ButterKnife.apply(mAppBarLayout, SET_TOOLBAR_FOR, APP_BAR_FOR_BANKS_VIEW);
                                 changeFragment = (currentFragment == 1);
