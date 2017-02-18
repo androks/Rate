@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
         setMainFragment();
     }
 
-//    public void testRequest(View view) {
-//        CurrencyManager.with(null).getToday();
-//    }
+    public void testRequest(View view) {
+        CurrencyManager.with(null).updateAverage();
+    }
 
     private void setOnNavigationItemSelectListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(

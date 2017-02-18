@@ -1,4 +1,4 @@
-package androks.rate.api;
+package androks.rate.api.data;
 
 import java.util.HashMap;
 
@@ -11,11 +11,11 @@ import androks.rate.api.model.CurrencyType;
  * andrii.pohrebniak@gmail.com
  */
 
-public class DataToday {
+public class Today {
 	private HashMap<String, CurrencyType> dollar;
 	private HashMap<String, CurrencyType> euro;
 
-	public DataToday(HashMap<String, CurrencyType> dollar, HashMap<String, CurrencyType> euro) {
+	public Today(HashMap<String, CurrencyType> dollar, HashMap<String, CurrencyType> euro) {
 		this.dollar = dollar;
 		this.euro = euro;
 	}

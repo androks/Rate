@@ -1,11 +1,10 @@
 package androks.rate.api;
 
 
-import android.util.Log;
-
 import java.util.HashMap;
 
 import androks.rate.api.model.CurrencyType;
+import androks.rate.api.data.Today;
 
 /**
  * androks.rate.api
@@ -20,7 +19,7 @@ public class CurrencyManager implements ApiManager.Listener{
 	private Listener listener;
 
 	public interface Listener {
-		void onTodayReady(DataToday dataToday);
+		void onTodayReady(Today today);
 
 		void onAverageReady();
 
@@ -35,16 +34,15 @@ public class CurrencyManager implements ApiManager.Listener{
 		return new CurrencyManager(listener);
 	}
 
-	public void getToday() {
+	public void updateToday() {
 		ApiManager.with(this).getTodayInfo();
-
 	}
 
-	public void getAverages() {
+	public void updateAverage() {
 		ApiManager.with(this).getAverageInfo();
 	}
 
-	public void getBanks() {
+	public void updateBanks() {
 		ApiManager.with(this).getBanksInfo();
 	}
 
@@ -65,8 +63,7 @@ public class CurrencyManager implements ApiManager.Listener{
 				euro = data.get(Utils.CURRENCY_EURO);
 			}
 
-			listener.onTodayReady(new DataToday(dollar, euro));
-			System.out.println("Seems ok:)");
+			listener.onTodayReady(new Today(dollar, euro));
 		} else {
 			listener.onTodayReady(null);
 		}
@@ -80,7 +77,14 @@ public class CurrencyManager implements ApiManager.Listener{
 
 	@Override
 	public void onAverageReady(HashMap<String, HashMap<String, HashMap<String, CurrencyType>>> data) {
-
+		try {
+			for (String date: data.keySet()) {
+				System.out.println(date);
+			}
+			System.out.println(data.get("2017-02-17").get("840").get("avg").buy.getValue());
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
