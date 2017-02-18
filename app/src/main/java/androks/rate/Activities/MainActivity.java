@@ -9,11 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import androks.rate.Fragments.AverageTodayFragment;
 import androks.rate.Fragments.BanksFragment;
 import androks.rate.Fragments.ByDatesFragment;
 import androks.rate.R;
+import androks.rate.api.CurrencyManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -39,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         setOnNavigationItemSelectListener();
         setMainFragment();
 
+    }
+
+    public void testTodayRequest(View view) {
+        CurrencyManager.getManager().getToday();
     }
 
     private void setOnNavigationItemSelectListener() {
