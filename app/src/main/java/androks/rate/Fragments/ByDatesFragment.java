@@ -8,9 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import androks.rate.R;
+import androks.rate.api.CurrencyManager;
+import androks.rate.api.Utils;
+import androks.rate.api.data.Average;
+import androks.rate.api.data.Today;
+import androks.rate.api.model.CurrencyType;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -27,26 +33,15 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by androks on 2/17/2017.
  */
 
-public class ByDatesFragment extends Fragment {
+public class ByDatesFragment extends Fragment implements CurrencyManager.Listener {
 
 
+    private HashMap<String, CurrencyType> mValues;
     private int numberOfLines = 1;
     private int maxNumberOfLines = 4;
     private int numberOfPoints = 12;
 
     float[][] randomNumbersTab = new float[maxNumberOfLines][numberOfPoints];
-
-    private boolean hasAxes = true;
-    private boolean hasAxesNames = true;
-    private boolean hasLines = true;
-    private boolean hasPoints = true;
-    private ValueShape shape = ValueShape.CIRCLE;
-    private boolean isFilled = false;
-    private boolean hasLabels = false;
-    private boolean isCubic = false;
-    private boolean hasLabelForSelected = false;
-    private boolean pointsHaveDifferentColor;
-    private boolean hasGradientToTransparent = false;
 
 
     private Unbinder unbinder;
@@ -63,14 +58,10 @@ public class ByDatesFragment extends Fragment {
 
         // Generate some random values.
         generateValues();
-
         generateData();
-
-        // Disable viewport recalculations, see toggleCubic() method for more info.
-        mChart.setViewportCalculationEnabled(false);
-
         resetViewport();
 
+        CurrencyManager.with(this).updateAverage();
         return rootView;
     }
 
@@ -78,14 +69,6 @@ public class ByDatesFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    private void generateValues() {
-        for (int i = 0; i < maxNumberOfLines; ++i) {
-            for (int j = 0; j < numberOfPoints; ++j) {
-                randomNumbersTab[i][j] = (float) Math.random() * 100f;
-            }
-        }
     }
 
     private void resetViewport() {
@@ -99,12 +82,22 @@ public class ByDatesFragment extends Fragment {
         mChart.setCurrentViewport(v);
     }
 
+    private void generateValues() {
+        for (int i = 0; i < maxNumberOfLines; ++i) {
+            for (int j = 0; j < numberOfPoints; ++j) {
+                randomNumbersTab[i][j] = (float) Math.random() * 100f;
+            }
+        }
+    }
+
     private void generateData() {
 
-        List<Line> lines = new ArrayList<Line>();
+        ValueShape shape = ValueShape.CIRCLE;
+
+        List<Line> lines = new ArrayList<>();
         for (int i = 0; i < numberOfLines; ++i) {
 
-            List<PointValue> values = new ArrayList<PointValue>();
+            List<PointValue> values = new ArrayList<>();
             for (int j = 0; j < numberOfPoints; ++j) {
                 values.add(new PointValue(j, randomNumbersTab[i][j]));
             }
@@ -112,36 +105,42 @@ public class ByDatesFragment extends Fragment {
             Line line = new Line(values);
             line.setColor(ChartUtils.COLORS[i]);
             line.setShape(shape);
-            line.setCubic(isCubic);
-            line.setFilled(isFilled);
-            line.setHasLabels(hasLabels);
-            line.setHasLabelsOnlyForSelected(hasLabelForSelected);
-            line.setHasLines(hasLines);
-            line.setHasPoints(hasPoints);
-            if (pointsHaveDifferentColor){
-                line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
-            }
+            line.setCubic(true);
+            line.setFilled(true);
+            line.setHasLabels(false);
+            line.setHasLabelsOnlyForSelected(true);
+            line.setHasLines(true);
+            line.setHasPoints(true);
             lines.add(line);
         }
 
         data = new LineChartData(lines);
 
-        if (hasAxes) {
-            Axis axisX = new Axis();
-            Axis axisY = new Axis().setHasLines(true);
-            if (hasAxesNames) {
-                axisX.setName("Axis X");
-                axisY.setName("Axis Y");
-            }
-            data.setAxisXBottom(axisX);
-            data.setAxisYLeft(axisY);
-        } else {
-            data.setAxisXBottom(null);
-            data.setAxisYLeft(null);
-        }
+        Axis axisX = new Axis();
+        Axis axisY = new Axis().setHasLines(true);
+        axisX.setName("Date");
+        axisY.setName("Value");
+        data.setAxisXBottom(axisX);
+        data.setAxisYLeft(axisY);
 
         data.setBaseValue(Float.NEGATIVE_INFINITY);
+        mChart.setValueSelectionEnabled(true);
         mChart.setLineChartData(data);
+
+    }
+
+    @Override
+    public void onTodayReady(Today today) {
+        //Nothing
+    }
+
+    @Override
+    public void onAverageReady(Average average) {
+        mValues = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR);
+    }
+
+    @Override
+    public void onBanksReady() {
 
     }
 }
