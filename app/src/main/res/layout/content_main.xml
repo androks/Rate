@@ -15,6 +15,12 @@
         android:layout_above="@+id/bottom_navigation"
         android:layout_alignParentTop="true" >
 
+        <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            android:onClick="testRequest"/>
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView

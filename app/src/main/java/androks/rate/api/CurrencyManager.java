@@ -1,11 +1,11 @@
 package androks.rate.api;
 
 
-import android.util.Log;
-
 import java.util.HashMap;
 
+import androks.rate.api.data.Average;
 import androks.rate.api.model.CurrencyType;
+import androks.rate.api.data.Today;
 
 /**
  * androks.rate.api
@@ -20,9 +20,9 @@ public class CurrencyManager implements ApiManager.Listener{
 	private Listener listener;
 
 	public interface Listener {
-		void onTodayReady(DataToday dataToday);
+		void onTodayReady(Today today);
 
-		void onAverageReady();
+		void onAverageReady(Average average);
 
 		void onBanksReady();
 	}
@@ -35,16 +35,15 @@ public class CurrencyManager implements ApiManager.Listener{
 		return new CurrencyManager(listener);
 	}
 
-	public void getToday() {
+	public void updateToday() {
 		ApiManager.with(this).getTodayInfo();
-
 	}
 
-	public void getAverages() {
+	public void updateAverage() {
 		ApiManager.with(this).getAverageInfo();
 	}
 
-	public void getBanks() {
+	public void updateBanks() {
 		ApiManager.with(this).getBanksInfo();
 	}
 
@@ -65,8 +64,7 @@ public class CurrencyManager implements ApiManager.Listener{
 				euro = data.get(Utils.CURRENCY_EURO);
 			}
 
-			listener.onTodayReady(new DataToday(dollar, euro));
-			System.out.println("Seems ok:)");
+			listener.onTodayReady(new Today(dollar, euro));
 		} else {
 			listener.onTodayReady(null);
 		}
@@ -75,17 +73,31 @@ public class CurrencyManager implements ApiManager.Listener{
 
 	@Override
 	public void onTodayError() {
-		listener.onTodayReady(null);
+		if (listener != null) {
+			listener.onTodayReady(null);
+		}
 	}
 
 	@Override
 	public void onAverageReady(HashMap<String, HashMap<String, HashMap<String, CurrencyType>>> data) {
+		if (listener == null) {
+			return;
+		}
+
+		if (data != null) {
+			Average average = new Average(data);
+			listener.onAverageReady(average);
+		} else {
+			listener.onAverageReady(null);
+		}
 
 	}
 
 	@Override
 	public void onAverageError() {
-
+		if (listener != null) {
+			listener.onAverageReady(null);
+		}
 	}
 
 	@Override
