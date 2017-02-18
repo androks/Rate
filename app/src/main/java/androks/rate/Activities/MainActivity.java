@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import androks.rate.Fragments.AverageTodayFragment;
 import androks.rate.Fragments.BanksFragment;
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
 
+    @BindView(R.id.toolbar_banks)
+    View banksToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         setOnNavigationItemSelectListener();
         setMainFragment();
-
     }
 
     private void setOnNavigationItemSelectListener() {
@@ -48,14 +51,17 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.banks:
+                                banksToolbar.setVisibility(View.VISIBLE);
                                 fragment = new BanksFragment();
                                 break;
 
                             case R.id.by_dates:
+                                banksToolbar.setVisibility(View.GONE);
                                 fragment = new ByDatesFragment();
                                 break;
 
                             case R.id.average_today:
+                                banksToolbar.setVisibility(View.GONE);
                                 fragment = new AverageTodayFragment();
                                 break;
                         }
@@ -69,10 +75,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setMainFragment(){
-
         fragment = new BanksFragment();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container, fragment).commit();
-
     }
 }

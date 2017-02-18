@@ -4,6 +4,11 @@
     <string name="banks">Banks</string>
     <string name="average_today">Average today</string>
     <string name="by_dates">By dates</string>
+    <string name="dollar_symbol">$</string>
+    <string name="average_currency">Average currency</string>
+    <string name="bank">Bank</string>
+    <string name="ask">Ask</string>
+    <string name="bid">Bid</string>
 
     <string-array name="banks_array">
         <item>National bank</item>
