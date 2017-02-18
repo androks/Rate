@@ -103,4 +103,10 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     public void onBanksReady(Banks banks) {
 
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

@@ -61,6 +61,6 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/ask"
         android:layout_below="@+id/ask"
-        tools:text="+005" />
+        android:text="+005" />
 </RelativeLayout>
 

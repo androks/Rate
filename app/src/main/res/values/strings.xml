@@ -10,7 +10,7 @@
     <string name="ask">Ask</string>
     <string name="bid">Bid</string>
 
-    <string-array name="banks_array">
+    <string-array name="bank_strings">
         <item>National bank</item>
         <item>Raiffeisen bank </item>
         <item>PrivatBank</item>
@@ -28,6 +28,25 @@
         <item>Black market</item>
         <item>Interbank</item>
     </string-array>
+
+    <integer-array name="bank_integers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>16</item>
+        <item>17</item>
+    </integer-array>
 
     <string-array name="periods_strings">
         <item>Last 3 day</item>

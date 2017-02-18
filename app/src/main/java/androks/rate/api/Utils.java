@@ -1,6 +1,10 @@
 package androks.rate.api;
 
+import android.content.Context;
+
 import java.util.Calendar;
+
+import androks.rate.R;
 
 /**
  * androks.rate.api
@@ -51,5 +55,15 @@ public class Utils {
 		calendar.set(year, month, day);
 
 		return calendar;
+	}
+
+	public static String getFriendlyBankTitle(Context context, int bankId){
+		int[] bankIds = context.getResources().getIntArray(R.array.bank_integers);
+		String[] bankStrings = context.getResources().getStringArray(R.array.bank_strings);
+
+		for(int i = 0; i<bankIds.length; i++)
+			if(bankId == bankIds[i])
+				return bankStrings[i];
+		return "UndefinedBank";
 	}
 }
