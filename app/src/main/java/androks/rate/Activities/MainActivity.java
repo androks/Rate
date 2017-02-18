@@ -6,7 +6,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -34,15 +33,17 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
     private static final String APP_BAR_FOR_AVERAGE_TODAY_VIEW = "APP_BAR_FOR_AVERAGE_TODAY_VIEW";
     private static final String APP_BAR_FOR_BY_DATES_VIEW = "APP_BAR_FOR_BY_DATES_VIEW";
 
-    private Fragment fragment;
-    private FragmentManager fragmentManager;
+    private int currentFragment = 0;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    private Fragment todayFragment;
+    private Fragment banksFragment;
+    private Fragment byDatesFragment;
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.toolbar_banks) View banksToolbar;
     @BindView(R.id.appBar) AppBarLayout mAppBarLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +51,22 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        fragmentManager = getSupportFragmentManager();
 
+        todayFragment = new AverageTodayFragment();
+        banksFragment = new BanksFragment();
+        byDatesFragment = new ByDatesFragment();
+
+
+        if (savedInstanceState != null) {
+            currentFragment = savedInstanceState.getInt("CURRENT_FRAGMENT");
+        }
         setOnNavigationItemSelectListener();
-        setMainFragment();
+        setCurrentFragment();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     public void testRequest(View view) {
@@ -85,35 +98,51 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        boolean changeFragment = false;
                         switch (item.getItemId()){
                             case R.id.banks:
                                 ButterKnife.apply(mAppBarLayout, SET_TOOLBAR_FOR, APP_BAR_FOR_BANKS_VIEW);
-                                fragment = new BanksFragment();
+                                changeFragment = (currentFragment == 1);
+                                currentFragment = 1;
                                 break;
 
                             case R.id.by_dates:
                                 ButterKnife.apply(mAppBarLayout, SET_TOOLBAR_FOR, APP_BAR_FOR_BY_DATES_VIEW);
-                                fragment = new ByDatesFragment();
+                                changeFragment = (currentFragment == 2);
+                                currentFragment = 2;
                                 break;
 
                             case R.id.average_today:
                                 ButterKnife.apply(mAppBarLayout, SET_TOOLBAR_FOR, APP_BAR_FOR_AVERAGE_TODAY_VIEW);
-                                fragment = new AverageTodayFragment();
+                                changeFragment = (currentFragment == 0);
+                                currentFragment = 0;
                                 break;
                         }
 
-                        final FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.container, fragment).commit();
+                        if (!changeFragment) {
+                            setCurrentFragment();
+                        }
 
                         return true;
                     }
                 });
     }
 
-    private void setMainFragment(){
-        fragment = new BanksFragment();
-        final FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container, fragment).commit();
+    private void setCurrentFragment(){
+        Fragment fragment = todayFragment;
+        switch (currentFragment) {
+            case 1:
+                fragment = banksFragment;
+                break;
+            case 0:
+                fragment = todayFragment;
+                break;
+            case 2:
+                fragment = byDatesFragment;
+                break;
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
     }
 
     static final ButterKnife.Setter<View, String> SET_TOOLBAR_FOR = new ButterKnife.Setter<View, String>() {

@@ -1,6 +1,7 @@
 package androks.rate.Fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,18 +33,38 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
 
     private List<BankItem> mBankList;
     private Unbinder unbinder;
+    private Banks banksData;
 
     @BindView(R.id.banksRV) RecyclerView mBanksRecyclerView;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_banks, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        CurrencyManager.with(this).updateBanks();
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (banksData == null) {
+            CurrencyManager.with(this).updateBanks();
+        } else {
+            mBankList = banksData.getBankListByCurrency(Utils.CURRENCY_DOLLAR);
+            setUpListView();
+        }
+    }
+
     private void setUpListView() {
+        if (mBanksRecyclerView == null) {
+            return;
+        }
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -77,6 +98,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
         if (banks != null) {
             mBankList = banks.getBankListByCurrency(Utils.CURRENCY_DOLLAR);
             setUpListView();
+            banksData = banks;
         }
     }
 
