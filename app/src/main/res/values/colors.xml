@@ -10,4 +10,7 @@
     <color name="lightPrimaryColor">#7986CB</color>
     <color name="grey200">#EEEEEE</color>
     <color name="grey100">#F5F5F5</color>
+
+    <color name="material_green">#4caf50</color>
+    <color name="material_red">#f44336</color>
 </resources>

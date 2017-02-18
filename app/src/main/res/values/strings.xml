@@ -40,4 +40,31 @@
         <item>5</item>
         <item>10</item>
     </integer-array>
+
+    <string name="today">Today</string>
+    <string name="average_in_banks">Average in banks</string>
+    <string name="for_one">for</string>
+    <string name="one">1$</string>
+    <string name="in_avg">average</string>
+
+    <string name="char_dollar">$</string>
+    <string name="char_euro">€</string>
+
+    <string-array name="common_banks_lables">
+        <item>Government</item>
+        <item>Interbank</item>
+        <item>Commercial</item>
+        <item>Black market</item>
+        <item>Average</item>
+    </string-array>
+
+    <string-array name="common_banks_keys">
+        <item>government</item>
+        <item>interbank</item>
+        <item>commercial</item>
+        <item>black</item>
+        <item>avg</item>
+    </string-array>
+
+
 </resources>
