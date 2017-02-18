@@ -40,11 +40,19 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
 
     private Unbinder unbinder;
     private Float[] mValues;
+    private Average averageData;
+
     @BindView(R.id.chart) LineChartView mChart;
     @BindArray(R.array.periods_int) int[] mPeriods;
     Spinner spinner;
 
     private int mNumberOfPoints;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
@@ -67,8 +75,19 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
             }
         });
 
-        CurrencyManager.with(this).updateAverage();
+
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (averageData == null) {
+            CurrencyManager.with(this).updateAverage();
+        } else {
+            convertToFloat(averageData);
+            generateData();
+        }
     }
 
     @Override
@@ -93,6 +112,9 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     }
 
     private void generateData() {
+        if (mChart == null) {
+            return;
+        }
 
         ValueShape shape = ValueShape.CIRCLE;
 
@@ -125,6 +147,18 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
         resetViewport();
     }
 
+    private void convertToFloat(Average average) {
+        int size = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR).size();
+        mValues = new Float[size];
+        for(int i = 0;i< size; i++){
+            mValues[i] = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR)
+                    .get(i)
+                    .currencyType
+                    .average
+                    .getValue();
+        }
+    }
+
     @Override
     public void onTodayReady(Today today) {
     }
@@ -132,16 +166,9 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     @Override
     public void onAverageReady(Average average) {
         if(average != null) {
-            int size = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR).size();
-            mValues = new Float[size];
-            for(int i = 0;i< size; i++){
-                mValues[i] = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR)
-                        .get(i)
-                        .currencyType
-                        .average
-                        .getValue();
-            }
+            convertToFloat(average);
             generateData();
+            averageData = average;
         }
     }
 

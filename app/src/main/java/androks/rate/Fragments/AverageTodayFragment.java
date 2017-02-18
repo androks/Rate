@@ -38,6 +38,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
 
     private Unbinder unbinder;
     private HashMap<String,String> commonBanksLabels = new HashMap<>();
+    private Today todayData = null;
 
     @BindView(R.id.average_currency) TextView mAverageCurrency;
     @BindView(R.id.average_currency_diff) TextView mAverageCurrencyDiff;
@@ -53,6 +54,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         initKeyMap();
     }
 
@@ -67,7 +69,13 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
 
     @Override
     public void onStart() {
-        CurrencyManager.with(this).updateToday();
+        if (todayData == null) {
+            CurrencyManager.with(this).updateToday();
+        } else {
+            inflateCommonAverageCurrency(todayData.getDollar()
+                    .get(Utils.CURRENCY_TYPE_AVERAGE).average);
+            inflateAverageCurrenciesByCommonBanks(todayData.getDollar());
+        }
         super.onStart();
     }
 
@@ -76,6 +84,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
         if(today != null) {
             inflateCommonAverageCurrency(today.getDollar().get(Utils.CURRENCY_TYPE_AVERAGE).average);
             inflateAverageCurrenciesByCommonBanks(today.getDollar());
+            todayData = today;
         }
     }
 
@@ -119,10 +128,6 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
         imgArrow.setImageDrawable((average.getDiff() > 0 ? arrowUp : arrowDown));
         mAverageCurrencyDiff.setText(averageCurrencyDiff);
         mAverageCurrencyDiff.setTextColor(average.getDiff() > 0 ? green:red);
-    }
-
-    private String capitalize(final String line) {
-        return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
 
     @Override
