@@ -1,9 +1,11 @@
 package androks.rate.api;
 
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import androks.rate.api.data.Average;
+import androks.rate.api.data.Banks;
 import androks.rate.api.model.CurrencyType;
 import androks.rate.api.data.Today;
 
@@ -24,7 +26,7 @@ public class CurrencyManager implements ApiManager.Listener{
 
 		void onAverageReady(Average average);
 
-		void onBanksReady();
+		void onBanksReady(Banks banks);
 	}
 
 	private CurrencyManager(Listener listener) {
@@ -102,11 +104,22 @@ public class CurrencyManager implements ApiManager.Listener{
 
 	@Override
 	public void onBanksReady(HashMap<String, HashMap<String, HashMap<String, CurrencyType>>> data) {
+		if (listener == null) {
+			return;
+		}
 
+		if (data != null) {
+			Banks banks = new Banks(data);
+			listener.onBanksReady(banks);
+		} else {
+			listener.onBanksReady(null);
+		}
 	}
 
 	@Override
 	public void onBanksError() {
-
+		if (listener != null) {
+			listener.onBanksReady(null);
+		}
 	}
 }

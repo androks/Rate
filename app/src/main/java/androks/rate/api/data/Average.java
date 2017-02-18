@@ -1,10 +1,12 @@
 package androks.rate.api.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import androks.rate.api.Pair;
 import androks.rate.api.Utils;
 import androks.rate.api.model.CurrencyType;
 
@@ -26,6 +28,10 @@ public class Average {
 		return data;
 	}
 
+	/**
+	 * Returns the list of dates
+	 * @return list of strings like "2017-02-18"
+	 */
 	public List<String> getDatesList() {
 		Set<String> datesSet = data.keySet();
 		List<String> datesList = new ArrayList<>();
@@ -37,6 +43,12 @@ public class Average {
 		return datesList;
 	}
 
+	/**
+	 * Returns average currency rates by date
+	 * @param currency code of currency
+	 * @param date
+	 * @return
+	 */
 	public CurrencyType getAverageCurrencyTypeByDate(String currency, String date) {
 		if (data.containsKey(date)) {
 			HashMap<String, HashMap<String, CurrencyType>> dateCurrenciesMap = data.get(date);
@@ -51,9 +63,14 @@ public class Average {
 		return null;
 	}
 
-	public HashMap<String, CurrencyType> getAverageCurrencyListByPeriod(String currency) {
+	/**
+	 * Returns the lis of Pairs
+	 * @param currency code of currency
+	 * @return sorted list of Pairs
+	 */
+	public List<Pair> getAverageCurrencyListByPeriod(String currency) {
 		Set<String> dates = data.keySet();
-		HashMap<String, CurrencyType> result = new HashMap<>();
+		List<Pair> pairs = new ArrayList<>();
 
 		for (String date: dates) {
 			HashMap<String, HashMap<String, CurrencyType>> dateCurrenciesMap = data.get(date);
@@ -62,8 +79,9 @@ public class Average {
 			if (currencyMap != null) {
 				currencyType =  currencyMap.get(Utils.CURRENCY_TYPE_AVERAGE);
 			}
-			result.put(date, currencyType);
+			pairs.add(new Pair(Utils.makeCalendar(date), currencyType));
 		}
-		return result;
+		Collections.sort(pairs);
+		return pairs;
 	}
 }
