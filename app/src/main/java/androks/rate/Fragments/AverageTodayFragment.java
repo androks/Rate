@@ -38,25 +38,36 @@ import butterknife.Unbinder;
  * Created by androks on 2/17/2017.
  */
 
-public class AverageTodayFragment extends Fragment implements CurrencyManager.Listener{
+public class AverageTodayFragment extends Fragment implements CurrencyManager.Listener {
 
     private Unbinder unbinder;
-    private HashMap<String,String> commonBanksLabels = new HashMap<>();
+    private HashMap<String, String> commonBanksLabels = new HashMap<>();
     private Today todayData = null;
 
-    @BindView(R.id.content) LinearLayout linearLayout;
-    @BindView(R.id.average_currency) TextView mAverageCurrency;
-    @BindView(R.id.average_currency_diff) TextView mAverageCurrencyDiff;
-    @BindView(R.id.banks_currencies_grid_container) LinearLayout mBanksCurrenciesGrigContainer;
-    @BindView(R.id.imgArrow) ImageView imgArrow;
-    @BindView(R.id.tvOne) TextView tvOne;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.content)
+    LinearLayout linearLayout;
+    @BindView(R.id.average_currency)
+    TextView mAverageCurrency;
+    @BindView(R.id.average_currency_diff)
+    TextView mAverageCurrencyDiff;
+    @BindView(R.id.banks_currencies_grid_container)
+    LinearLayout mBanksCurrenciesGrigContainer;
+    @BindView(R.id.imgArrow)
+    ImageView imgArrow;
+    @BindView(R.id.tvOne)
+    TextView tvOne;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
-    @BindColor(R.color.material_red) int red;
-    @BindColor(R.color.material_green) int green;
+    @BindColor(R.color.material_red)
+    int red;
+    @BindColor(R.color.material_green)
+    int green;
 
-    @BindDrawable(R.drawable.ic_arrow_down_red) Drawable arrowDown;
-    @BindDrawable(R.drawable.ic_arrow_upward) Drawable arrowUp;
+    @BindDrawable(R.drawable.ic_arrow_down_red)
+    Drawable arrowDown;
+    @BindDrawable(R.drawable.ic_arrow_upward)
+    Drawable arrowUp;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,7 +151,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     }
 
     private void inflateViews(Today today) {
-        if(today != null && getActivity() != null) {
+        if (today != null && getActivity() != null) {
             String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
             if (currentCurrency.equals(Utils.CURRENCY_DOLLAR)) {
                 inflateCommonAverageCurrency(today.getDollar().get(Utils.CURRENCY_TYPE_AVERAGE).average);
@@ -155,10 +166,11 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
 
     @Override
     public void onTodayReady(Today today) {
-        if(today != null) {
+        if (today != null) {
             inflateViews(today);
             todayData = today;
-        }
+        } else
+            CurrencyManager.with(this).updateToday();
     }
 
     private void initKeyMap() {
@@ -174,7 +186,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
         Set<String> titles = currencyTypeHashMap.keySet();
         mBanksCurrenciesGrigContainer.removeAllViewsInLayout();
 
-        for(String title: titles){
+        for (String title : titles) {
             CurrencyType values = currencyTypeHashMap.get(title);
             View bankView = getActivity().getLayoutInflater().inflate(R.layout.item_bank_grig_layout, null);
 
@@ -204,7 +216,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
         tvOne.setText(currentCurrency.equals(Utils.CURRENCY_DOLLAR)
                 ? R.string.one_dollar : R.string.one_euro);
         mAverageCurrencyDiff.setText(averageCurrencyDiff);
-        mAverageCurrencyDiff.setTextColor(average.getDiff() > 0 ? green:red);
+        mAverageCurrencyDiff.setTextColor(average.getDiff() > 0 ? green : red);
     }
 
     @Override

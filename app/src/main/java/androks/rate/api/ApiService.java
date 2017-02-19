@@ -15,15 +15,15 @@ import retrofit2.http.Headers;
  */
 
 public interface ApiService {
-	@Headers("X-Mashape-Key: GiLq80q8drmsh4yxF2KgSveZIMmPp1h4xwLjsnIPNt5a4Ai7ru")
+	@Headers("X-Mashape-Key: 3p50WQjqYBmsh2T9soUjliqCycqdp1NOr4ZjsnUK2DLNWLd96U")
 	@GET("/v1/rates/today")
 	Call<ResponseToday> today();
 
-	@Headers("X-Mashape-Key: GiLq80q8drmsh4yxF2KgSveZIMmPp1h4xwLjsnIPNt5a4Ai7ru")
+	@Headers("X-Mashape-Key: 3p50WQjqYBmsh2T9soUjliqCycqdp1NOr4ZjsnUK2DLNWLd96U")
 	@GET("/v1/rates/averages")
 	Call<ResponseAverage> averages();
 
-	@Headers("X-Mashape-Key: GiLq80q8drmsh4yxF2KgSveZIMmPp1h4xwLjsnIPNt5a4Ai7ru")
+	@Headers("X-Mashape-Key: 3p50WQjqYBmsh2T9soUjliqCycqdp1NOr4ZjsnUK2DLNWLd96U")
 	@GET("/v1/rates/banks")
 	Call<ResponseBanks> banks();
 }

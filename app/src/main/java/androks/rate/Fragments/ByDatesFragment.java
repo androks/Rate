@@ -66,7 +66,7 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_by_dates, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         setToolbarTitle();
         mNumberOfPoints = mPeriods[0];
@@ -235,7 +235,8 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
             convertToFloat(average);
             generateData();
             averageData = average;
-        }
+        } else
+            CurrencyManager.with(this).updateAverage();
     }
 
     @Override
