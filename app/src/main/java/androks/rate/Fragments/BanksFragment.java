@@ -7,12 +7,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
 import androks.rate.Activities.BankActivity;
+import androks.rate.Activities.MainActivity;
 import androks.rate.Adapters.BanksListViewAdapter;
 import androks.rate.Adapters.RecyclerItemClickListener;
 import androks.rate.R;
@@ -26,6 +31,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static androks.rate.R.id.progressBar;
+
 /**
  * Created by androks on 2/17/2017.
  */
@@ -38,18 +45,20 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
     private Unbinder unbinder;
     private Banks banksData;
 
-    @BindView(R.id.banksRV) RecyclerView mBanksRecyclerView;
+    @BindView(R.id.rvBanks) RecyclerView mBanksRecyclerView;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_banks, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
+        setToolbarTitle();
         return rootView;
     }
 
@@ -57,10 +66,71 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
     public void onStart() {
         super.onStart();
         if (banksData == null) {
+            showProgress();
             CurrencyManager.with(this).updateBanks();
         } else {
-            mBankList = banksData.getBankListByCurrency(Utils.CURRENCY_DOLLAR);
+            getBankList(banksData);
             setUpListView();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_exchange) {
+            changeCurrency();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        mBanksRecyclerView.setVisibility(View.GONE);
+    }
+
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        mBanksRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void setToolbarTitle() {
+        if (getActivity() == null) {
+            return;
+        }
+        String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+        if (currentCurrency.equals(Utils.CURRENCY_DOLLAR)) {
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.dollar);
+        } else {
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.euro);
+        }
+    }
+
+    private void changeCurrency() {
+        String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+        if (currentCurrency.equals(Utils.CURRENCY_DOLLAR)) {
+            ((MainActivity) getActivity()).currentCurrency = Utils.CURRENCY_EURO;
+        } else {
+            ((MainActivity) getActivity()).currentCurrency = Utils.CURRENCY_DOLLAR;
+        }
+        if (banksData != null) {
+            getBankList(banksData);
+            setUpListView();
+        } else {
+            CurrencyManager.with(this).updateBanks();
+        }
+        setToolbarTitle();
+    }
+
+    private void getBankList(Banks banks) {
+        if (banks != null && getActivity() != null) {
+            String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+            mBankList = banks.getBankListByCurrency(currentCurrency);
         }
     }
 
@@ -68,12 +138,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
         if (mBanksRecyclerView == null) {
             return;
         }
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         mBanksRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mBanksRecyclerView.setLayoutManager(mLayoutManager);
         BanksListViewAdapter adapter = new BanksListViewAdapter(getActivity(), mBankList);
@@ -98,6 +163,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
                             }
                 })
         );
+        hideProgress();
     }
 
     @Override public void onDestroyView() {
@@ -118,7 +184,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
     @Override
     public void onBanksReady(Banks banks) {
         if (banks != null) {
-            mBankList = banks.getBankListByCurrency(Utils.CURRENCY_DOLLAR);
+            getBankList(banks);
             setUpListView();
             banksData = banks;
         } else

@@ -1,161 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/content">
+
+            <TextView
+                android:id="@+id/tvToday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/today"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginBottom="16dp"
+                                                android:layout_marginTop="8dp"
+                                                card_view:cardCornerRadius="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/imgArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        app:srcCompat="@drawable/ic_stop" />
+
+                    <TextView
+                        android:id="@+id/average_currency"
+                        style="@style/TextAppearance.AppCompat.Display3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        tools:text="27.02" />
+
+                    <TextView
+                        android:id="@+id/tvFor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/average_currency"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_toRightOf="@+id/average_currency"
+                        android:text="@string/for_one"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                    <TextView
+                        android:id="@+id/average_currency_diff"
+                        style="@style/Base.TextAppearance.AppCompat.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_below="@+id/average_currency"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@+id/imgArrow"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        tools:text="+0.20" />
+
+                    <TextView
+                        android:id="@+id/tvOne"
+                        style="@style/TextAppearance.AppCompat.Display3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/average_currency"
+                        android:layout_toEndOf="@+id/tvFor"
+                        android:layout_toRightOf="@+id/tvFor"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/mdtp_transparent_black" />
+
+                    <TextView
+                        android:id="@+id/tvInAvg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/average_currency_diff"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/in_avg"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvAverageInBanks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/average_in_banks"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginBottom="16dp"
+                                                android:layout_marginTop="8dp"
+                                                card_view:cardCornerRadius="4dp">
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:columnCount="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Caption"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:text="Ask" />
+
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Caption"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:text="Bid" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/banks_currencies_grid_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </GridLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:id="@+id/progressBar"
+        android:layout_centerInParent="true"/>
 
-        <TextView
-            android:id="@+id/tvToday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/today"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
-            card_view:cardCornerRadius="4dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16dp">
-
-                <ImageView
-                    android:id="@+id/imgArrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    app:srcCompat="@drawable/ic_stop" />
-
-                <TextView
-                    android:id="@+id/average_currency"
-                    style="@style/TextAppearance.AppCompat.Display3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    tools:text="27.02" />
-
-                <TextView
-                    android:id="@+id/tvFor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/average_currency"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_toRightOf="@+id/average_currency"
-                    android:text="@string/for_one"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-                <TextView
-                    android:id="@+id/average_currency_diff"
-                    style="@style/Base.TextAppearance.AppCompat.Large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_below="@+id/average_currency"
-                    android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@+id/imgArrow"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    tools:text="+0.20" />
-
-                <TextView
-                    android:id="@+id/tvOne"
-                    style="@style/TextAppearance.AppCompat.Display3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/average_currency"
-                    android:layout_toEndOf="@+id/tvFor"
-                    android:layout_toRightOf="@+id/tvFor"
-                    android:paddingEnd="8dp"
-                    android:paddingRight="8dp"
-                    android:text="@string/one"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textColor="@color/mdtp_transparent_black" />
-
-                <TextView
-                    android:id="@+id/tvInAvg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/average_currency_diff"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="8dp"
-                    android:text="@string/in_avg"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <TextView
-            android:id="@+id/tvAverageInBanks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/average_in_banks"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
-            card_view:cardCornerRadius="4dp">
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="16dp"
-                android:columnCount="1">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        style="@style/TextAppearance.AppCompat.Caption"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="Ask" />
-
-                    <TextView
-                        style="@style/TextAppearance.AppCompat.Caption"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="Bid" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/banks_currencies_grid_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </GridLayout>
-        </android.support.v7.widget.CardView>
-
-    </LinearLayout>
-</ScrollView>
+</RelativeLayout>

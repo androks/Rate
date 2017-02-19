@@ -63,7 +63,8 @@
     <string name="today">Today</string>
     <string name="average_in_banks">Average in banks</string>
     <string name="for_one">for</string>
-    <string name="one">1$</string>
+    <string name="one_dollar">1$</string>
+    <string name="one_euro">1€</string>
     <string name="in_avg">average</string>
 
     <string name="char_dollar">$</string>
@@ -88,5 +89,7 @@
         <item>avg</item>
     </string-array>
 
+    <string name="euro">EUR</string>
+    <string name="dollar">USD</string>
 
 </resources>

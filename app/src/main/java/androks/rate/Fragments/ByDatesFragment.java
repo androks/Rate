@@ -4,15 +4,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import androks.rate.Activities.MainActivity;
 import androks.rate.R;
 import androks.rate.api.CurrencyManager;
 import androks.rate.api.Utils;
@@ -43,6 +49,8 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     private Average averageData;
 
     @BindView(R.id.chart) LineChartView mChart;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.content) LinearLayout linearLayout;
     @BindArray(R.array.periods_int) int[] mPeriods;
     Spinner spinner;
 
@@ -52,6 +60,7 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -59,7 +68,7 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_by_dates, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
+        setToolbarTitle();
         mNumberOfPoints = mPeriods[0];
         spinner = (Spinner) getActivity().findViewById(R.id.period_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -74,8 +83,6 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
 
             }
         });
-
-
         return rootView;
     }
 
@@ -83,11 +90,65 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     public void onStart() {
         super.onStart();
         if (averageData == null) {
+            showProgress();
             CurrencyManager.with(this).updateAverage();
         } else {
             convertToFloat(averageData);
             generateData();
         }
+    }
+
+    private void setToolbarTitle() {
+        if (getActivity() == null) {
+            return;
+        }
+        String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+        if (currentCurrency.equals(Utils.CURRENCY_DOLLAR)) {
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.dollar);
+        } else {
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.euro);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_exchange) {
+            changeCurrency();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        linearLayout.setVisibility(View.GONE);
+    }
+
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void changeCurrency() {
+        String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+        if (currentCurrency.equals(Utils.CURRENCY_DOLLAR)) {
+            ((MainActivity) getActivity()).currentCurrency = Utils.CURRENCY_EURO;
+        } else {
+            ((MainActivity) getActivity()).currentCurrency = Utils.CURRENCY_DOLLAR;
+        }
+        if (averageData != null) {
+            convertToFloat(averageData);
+            generateData();
+        } else {
+            CurrencyManager.with(this).updateAverage();
+        }
+        setToolbarTitle();
     }
 
     @Override
@@ -138,24 +199,29 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
         LineChartData data = new LineChartData(lines);
 
         Axis axisY = new Axis().setHasLines(true);
-        axisY.setName("Value");
+//        axisY.setName("Value");
         data.setAxisYLeft(axisY);
 
         data.setBaseValue(Float.NEGATIVE_INFINITY);
         mChart.setValueSelectionEnabled(true);
         mChart.setLineChartData(data);
         resetViewport();
+
+        hideProgress();
     }
 
     private void convertToFloat(Average average) {
-        int size = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR).size();
-        mValues = new Float[size];
-        for(int i = 0;i< size; i++){
-            mValues[i] = average.getAverageCurrencyListByPeriod(Utils.CURRENCY_DOLLAR)
-                    .get(i)
-                    .currencyType
-                    .average
-                    .getValue();
+        if (getActivity() != null) {
+            String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+            int size = average.getAverageCurrencyListByPeriod(currentCurrency).size();
+            mValues = new Float[size];
+            for(int i = 0;i< size; i++){
+                mValues[i] = average.getAverageCurrencyListByPeriod(currentCurrency)
+                        .get(i)
+                        .currencyType
+                        .average
+                        .getValue();
+            }
         }
     }
 

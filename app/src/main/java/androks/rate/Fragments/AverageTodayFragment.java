@@ -5,16 +5,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
+import androks.rate.Activities.MainActivity;
 import androks.rate.R;
 import androks.rate.api.CurrencyManager;
 import androks.rate.api.Utils;
@@ -39,10 +44,13 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     private HashMap<String,String> commonBanksLabels = new HashMap<>();
     private Today todayData = null;
 
+    @BindView(R.id.content) LinearLayout linearLayout;
     @BindView(R.id.average_currency) TextView mAverageCurrency;
     @BindView(R.id.average_currency_diff) TextView mAverageCurrencyDiff;
     @BindView(R.id.banks_currencies_grid_container) LinearLayout mBanksCurrenciesGrigContainer;
     @BindView(R.id.imgArrow) ImageView imgArrow;
+    @BindView(R.id.tvOne) TextView tvOne;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @BindColor(R.color.material_red) int red;
     @BindColor(R.color.material_green) int green;
@@ -53,6 +61,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         setRetainInstance(true);
     }
 
@@ -61,6 +70,8 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_average_today, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+
+        setToolbarTitle();
         initKeyMap();
         return rootView;
     }
@@ -68,20 +79,84 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     @Override
     public void onStart() {
         if (todayData == null) {
+            showProgress();
             CurrencyManager.with(this).updateToday();
         } else {
-            inflateCommonAverageCurrency(todayData.getDollar()
-                    .get(Utils.CURRENCY_TYPE_AVERAGE).average);
-            inflateAverageCurrenciesByCommonBanks(todayData.getDollar());
+            inflateViews(todayData);
         }
         super.onStart();
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_exchange) {
+            changeCurrency();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        linearLayout.setVisibility(View.GONE);
+    }
+
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void setToolbarTitle() {
+        if (getActivity() == null) {
+            return;
+        }
+        String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+        if (currentCurrency.equals(Utils.CURRENCY_DOLLAR)) {
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.dollar);
+        } else {
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.euro);
+        }
+    }
+
+    private void changeCurrency() {
+        String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+        if (currentCurrency.equals(Utils.CURRENCY_DOLLAR)) {
+            ((MainActivity) getActivity()).currentCurrency = Utils.CURRENCY_EURO;
+        } else {
+            ((MainActivity) getActivity()).currentCurrency = Utils.CURRENCY_DOLLAR;
+        }
+        if (todayData != null) {
+            inflateViews(todayData);
+        } else {
+            CurrencyManager.with(this).updateToday();
+        }
+        setToolbarTitle();
+    }
+
+    private void inflateViews(Today today) {
+        if(today != null && getActivity() != null) {
+            String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
+            if (currentCurrency.equals(Utils.CURRENCY_DOLLAR)) {
+                inflateCommonAverageCurrency(today.getDollar().get(Utils.CURRENCY_TYPE_AVERAGE).average);
+                inflateAverageCurrenciesByCommonBanks(today.getDollar());
+            } else {
+                inflateCommonAverageCurrency(today.getEuro().get(Utils.CURRENCY_TYPE_AVERAGE).average);
+                inflateAverageCurrenciesByCommonBanks(today.getEuro());
+            }
+            hideProgress();
+        }
+    }
+
+    @Override
     public void onTodayReady(Today today) {
         if(today != null) {
-            inflateCommonAverageCurrency(today.getDollar().get(Utils.CURRENCY_TYPE_AVERAGE).average);
-            inflateAverageCurrenciesByCommonBanks(today.getDollar());
+            inflateViews(today);
             todayData = today;
         }
     }
@@ -97,6 +172,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     private void inflateAverageCurrenciesByCommonBanks(HashMap<String,
             CurrencyType> currencyTypeHashMap) {
         Set<String> titles = currencyTypeHashMap.keySet();
+        mBanksCurrenciesGrigContainer.removeAllViewsInLayout();
 
         for(String title: titles){
             CurrencyType values = currencyTypeHashMap.get(title);
@@ -121,9 +197,12 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     }
 
     private void inflateCommonAverageCurrency(CurrencyValue average) {
+        String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
         mAverageCurrency.setText(String.format(Locale.getDefault(), "%.2f", average.getValue()));
         String averageCurrencyDiff = String.format(Locale.getDefault(), "%.2f", average.getDiff());
         imgArrow.setImageDrawable((average.getDiff() > 0 ? arrowUp : arrowDown));
+        tvOne.setText(currentCurrency.equals(Utils.CURRENCY_DOLLAR)
+                ? R.string.one_dollar : R.string.one_euro);
         mAverageCurrencyDiff.setText(averageCurrencyDiff);
         mAverageCurrencyDiff.setTextColor(average.getDiff() > 0 ? green:red);
     }
