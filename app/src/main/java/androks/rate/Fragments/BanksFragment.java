@@ -1,5 +1,6 @@
 package androks.rate.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,9 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import androks.rate.Activities.BankActivity;
 import androks.rate.Adapters.BanksListViewAdapter;
+import androks.rate.Adapters.RecyclerItemClickListener;
 import androks.rate.R;
 import androks.rate.api.CurrencyManager;
 import androks.rate.api.Utils;
@@ -29,7 +32,7 @@ import butterknife.Unbinder;
 
 public class BanksFragment extends Fragment implements CurrencyManager.Listener{
 
-    private static final String BANK = "BANK";
+    private static final String BANK_ID = "BANK_ID";
 
     private List<BankItem> mBankList;
     private Unbinder unbinder;
@@ -75,7 +78,24 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
         mBanksRecyclerView.setLayoutManager(mLayoutManager);
         BanksListViewAdapter adapter = new BanksListViewAdapter(getActivity(), mBankList);
         mBanksRecyclerView.setAdapter(adapter);
+        mBanksRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getContext(),
+                        mBanksRecyclerView,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Intent intent = new Intent(getActivity(), BankActivity.class);
+                                intent.putExtra(BANK_ID, mBankList.get(position).bankId);
+                            }
 
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                Intent intent = new Intent(getActivity(), BankActivity.class);
+                                intent.putExtra(BANK_ID, mBankList.get(position).bankId);
+                            }
+                })
+        );
     }
 
     @Override public void onDestroyView() {

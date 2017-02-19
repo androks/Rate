@@ -20,77 +20,11 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <RelativeLayout
-            android:id="@+id/toolbar_banks"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:visibility="visible">
+        <include
+            layout="@layout/toolbar_for_currencies" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/dividerColor" />
-
-            <TextView
-                android:id="@+id/banktextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:text="@string/bank"
-                android:textIsSelectable="false" />
-
-            <TextView
-                android:id="@+id/asktextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:text="@string/ask"
-                android:textIsSelectable="false"
-                android:textSize="14dp" />
-
-            <TextView
-                android:id="@+id/bidtextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="false"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/asktextView"
-                android:paddingRight="24dp"
-                android:text="@string/bid"
-                android:textSize="14dp" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/toolbar_period"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:visibility="gone">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/dividerColor" />
-
-            <Spinner
-                android:id="@+id/period_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/periods_strings"
-                android:padding="8dp" />
-        </LinearLayout>
-
+        <include
+            layout="@layout/toolbar_for_graph"/>
 
     </android.support.design.widget.AppBarLayout>
 
