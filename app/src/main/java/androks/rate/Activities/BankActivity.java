@@ -23,8 +23,6 @@ import androks.rate.api.data.Today;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static androks.rate.R.id.progressBar;
-
 public class BankActivity extends AppCompatActivity implements CurrencyManager.Listener{
 
     private static final String BANK_ID = "BANK_ID";
@@ -42,9 +40,9 @@ public class BankActivity extends AppCompatActivity implements CurrencyManager.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        ButterKnife.bind(this);
         mBankId = getIntent().getIntExtra(BANK_ID, 0);
         toolbar.setTitle(Utils.getFriendlyBankTitle(getApplicationContext(), mBankId));
 
@@ -114,6 +112,9 @@ public class BankActivity extends AppCompatActivity implements CurrencyManager.L
             setUpRecyclerView();
         } else
             updateData();
+
+
+        banksData = banks;
     }
 
     private void setmCurrencyList(Banks banks) {
