@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
     private static final String APP_BAR_FOR_BY_DATES_VIEW = "APP_BAR_FOR_BY_DATES_VIEW";
 
     private int currentFragment = 0;
+    public String currentCurrency = Utils.CURRENCY_DOLLAR;
 
     private Fragment todayFragment;
     private Fragment banksFragment;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
 
         if (savedInstanceState != null) {
             currentFragment = savedInstanceState.getInt("CURRENT_FRAGMENT");
+            currentCurrency = savedInstanceState.getString("CURRENT_CURRENCY");
         }
         setOnNavigationItemSelectListener();
         setCurrentFragment();
@@ -67,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("CURRENT_FRAGMENT", currentFragment);
+        outState.putString("CURRENT_CURRENCY", currentCurrency);
     }
 
     public void testRequest(View view) {

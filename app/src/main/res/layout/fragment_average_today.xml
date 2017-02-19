@@ -82,7 +82,6 @@
                     android:layout_toRightOf="@+id/tvFor"
                     android:paddingEnd="8dp"
                     android:paddingRight="8dp"
-                    android:text="@string/one"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@color/mdtp_transparent_black" />
 
