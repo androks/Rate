@@ -31,8 +31,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static androks.rate.R.id.progressBar;
-
 /**
  * Created by androks on 2/17/2017.
  */
@@ -160,11 +158,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
                             }
 
                             @Override
-                            public void onLongItemClick(View view, int position) {
-                                Intent intent = new Intent(getActivity(), BankActivity.class);
-                                intent.putExtra(BANK_ID, mBankList.get(position).bankId);
-                                startActivity(intent);
-                            }
+                            public void onLongItemClick(View view, int position) {}
                 })
         );
         hideProgress();
