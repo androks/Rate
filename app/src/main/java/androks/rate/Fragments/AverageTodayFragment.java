@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -44,11 +45,13 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     private HashMap<String,String> commonBanksLabels = new HashMap<>();
     private Today todayData = null;
 
+    @BindView(R.id.content) LinearLayout linearLayout;
     @BindView(R.id.average_currency) TextView mAverageCurrency;
     @BindView(R.id.average_currency_diff) TextView mAverageCurrencyDiff;
     @BindView(R.id.banks_currencies_grid_container) LinearLayout mBanksCurrenciesGrigContainer;
     @BindView(R.id.imgArrow) ImageView imgArrow;
     @BindView(R.id.tvOne) TextView tvOne;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @BindColor(R.color.material_red) int red;
     @BindColor(R.color.material_green) int green;
@@ -77,6 +80,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     @Override
     public void onStart() {
         if (todayData == null) {
+            showProgress();
             CurrencyManager.with(this).updateToday();
         } else {
             inflateViews(todayData);
@@ -97,6 +101,16 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
         }
 
         return false;
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        linearLayout.setVisibility(View.GONE);
+    }
+
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
     }
 
     private void setToolbarTitle() {
@@ -136,6 +150,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
                 inflateCommonAverageCurrency(today.getEuro().get(Utils.CURRENCY_TYPE_AVERAGE).average);
                 inflateAverageCurrenciesByCommonBanks(today.getEuro());
             }
+            hideProgress();
         }
     }
 

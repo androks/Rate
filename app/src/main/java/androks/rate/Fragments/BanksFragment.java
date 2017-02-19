@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static androks.rate.R.id.progressBar;
+
 /**
  * Created by androks on 2/17/2017.
  */
@@ -39,7 +42,8 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
     private Unbinder unbinder;
     private Banks banksData;
 
-    @BindView(R.id.banksRV) RecyclerView mBanksRecyclerView;
+    @BindView(R.id.rvBanks) RecyclerView mBanksRecyclerView;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
     public void onStart() {
         super.onStart();
         if (banksData == null) {
+            showProgress();
             CurrencyManager.with(this).updateBanks();
         } else {
             getBankList(banksData);
@@ -79,6 +84,16 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
         }
 
         return false;
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        mBanksRecyclerView.setVisibility(View.GONE);
+    }
+
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        mBanksRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void setToolbarTitle() {
@@ -125,6 +140,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
         mBanksRecyclerView.setLayoutManager(mLayoutManager);
         BanksListViewAdapter adapter = new BanksListViewAdapter(getActivity(), mBankList);
         mBanksRecyclerView.setAdapter(adapter);
+        hideProgress();
     }
 
     @Override public void onDestroyView() {

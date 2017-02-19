@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     private Average averageData;
 
     @BindView(R.id.chart) LineChartView mChart;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.content) LinearLayout linearLayout;
     @BindArray(R.array.periods_int) int[] mPeriods;
     Spinner spinner;
 
@@ -86,6 +90,7 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     public void onStart() {
         super.onStart();
         if (averageData == null) {
+            showProgress();
             CurrencyManager.with(this).updateAverage();
         } else {
             convertToFloat(averageData);
@@ -118,6 +123,16 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
         }
 
         return false;
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        linearLayout.setVisibility(View.GONE);
+    }
+
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
     }
 
     private void changeCurrency() {
@@ -191,6 +206,8 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
         mChart.setValueSelectionEnabled(true);
         mChart.setLineChartData(data);
         resetViewport();
+
+        hideProgress();
     }
 
     private void convertToFloat(Average average) {
