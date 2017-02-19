@@ -54,6 +54,7 @@ public class BankActivity extends AppCompatActivity implements CurrencyManager.L
 
     @Override
     public void onBanksReady(Banks banks) {
+
         if(banks != null) {
             mCurrencyList = banks.getCurrencyTypeListByPeriod(Utils.CURRENCY_DOLLAR, mBankId);
             setUpRecyclerView();
