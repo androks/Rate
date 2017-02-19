@@ -69,6 +69,8 @@
     <string name="char_dollar">$</string>
     <string name="char_euro">€</string>
     <string name="date">Date</string>
+    <string name="buy">Buy</string>
+    <string name="sale">Sale</string>
 
     <string-array name="common_banks_lables">
         <item>Government</item>

@@ -65,5 +65,6 @@ public class BanksListViewAdapter extends RecyclerView.Adapter<BanksListViewAdap
         @BindView(R.id.bank_title) TextView mBank;
         @BindView(R.id.ask) TextView mAsk;
         @BindView(R.id.bid) TextView mBid;
+
     }
 }

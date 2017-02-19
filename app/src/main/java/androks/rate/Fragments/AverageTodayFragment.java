@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -55,7 +54,6 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        initKeyMap();
     }
 
     @Nullable
@@ -63,7 +61,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_average_today, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
+        initKeyMap();
         return rootView;
     }
 

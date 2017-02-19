@@ -87,12 +87,14 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
                             public void onItemClick(View view, int position) {
                                 Intent intent = new Intent(getActivity(), BankActivity.class);
                                 intent.putExtra(BANK_ID, mBankList.get(position).bankId);
+                                startActivity(intent);
                             }
 
                             @Override
                             public void onLongItemClick(View view, int position) {
                                 Intent intent = new Intent(getActivity(), BankActivity.class);
                                 intent.putExtra(BANK_ID, mBankList.get(position).bankId);
+                                startActivity(intent);
                             }
                 })
         );
@@ -119,7 +121,8 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
             mBankList = banks.getBankListByCurrency(Utils.CURRENCY_DOLLAR);
             setUpListView();
             banksData = banks;
-        }
+        } else
+            CurrencyManager.with(this).updateBanks();
     }
 
 

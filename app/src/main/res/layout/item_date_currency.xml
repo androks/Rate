@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.AppCompat.Button.Borderless"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <GridLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:columnCount="1">
+
+        <LinearLayout>
+
+            <TextView
+                android:id="@+id/buy"
+                style="@android:style/TextAppearance.DeviceDefault.SearchResult.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingEnd="24dp"
+                android:paddingRight="24dp"
+                tools:text="25.87" />
+
+            <TextView
+                android:id="@+id/sale"
+                style="@android:style/TextAppearance.DeviceDefault.SearchResult.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                tools:text="26.00" />
+        </LinearLayout>
+
+        <LinearLayout>
+
+            <ImageView
+                android:id="@+id/buy_diff_img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/buy_diff"
+                style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingEnd="18dp"
+                android:paddingRight="18dp"
+                tools:text="-0.2" />
+
+            <ImageView
+                android:id="@+id/sale_diff_img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/sale_diff"
+                style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                tools:text="+0.02" />
+
+        </LinearLayout>
+
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        tools:text="12.02.2017" />
+
+</LinearLayout>
+
