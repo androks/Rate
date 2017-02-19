@@ -90,8 +90,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
     @Override
     public void onStart() {
         if (todayData == null) {
-            showProgress();
-            CurrencyManager.with(this).updateToday();
+            updateData();
         } else {
             inflateViews(todayData);
         }
@@ -111,6 +110,11 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
         }
 
         return false;
+    }
+
+    private void updateData() {
+        showProgress();
+        CurrencyManager.with(this).updateToday();
     }
 
     private void showProgress() {
@@ -145,7 +149,7 @@ public class AverageTodayFragment extends Fragment implements CurrencyManager.Li
         if (todayData != null) {
             inflateViews(todayData);
         } else {
-            CurrencyManager.with(this).updateToday();
+            updateData();
         }
         setToolbarTitle();
     }

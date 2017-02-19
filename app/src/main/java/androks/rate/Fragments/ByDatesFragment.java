@@ -90,8 +90,7 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     public void onStart() {
         super.onStart();
         if (averageData == null) {
-            showProgress();
-            CurrencyManager.with(this).updateAverage();
+            updateData();
         } else {
             convertToFloat(averageData);
             generateData();
@@ -125,6 +124,11 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
         return false;
     }
 
+    private void updateData() {
+        showProgress();
+        CurrencyManager.with(this).updateAverage();
+    }
+
     private void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
         linearLayout.setVisibility(View.GONE);
@@ -146,7 +150,7 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
             convertToFloat(averageData);
             generateData();
         } else {
-            CurrencyManager.with(this).updateAverage();
+            updateData();
         }
         setToolbarTitle();
     }

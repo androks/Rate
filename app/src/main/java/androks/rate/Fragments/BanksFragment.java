@@ -66,8 +66,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
     public void onStart() {
         super.onStart();
         if (banksData == null) {
-            showProgress();
-            CurrencyManager.with(this).updateBanks();
+            updateData();
         } else {
             getBankList(banksData);
             setUpListView();
@@ -87,6 +86,11 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
         }
 
         return false;
+    }
+
+    private void updateData() {
+        showProgress();
+        CurrencyManager.with(this).updateBanks();
     }
 
     private void showProgress() {
@@ -122,7 +126,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
             getBankList(banksData);
             setUpListView();
         } else {
-            CurrencyManager.with(this).updateBanks();
+            updateData();
         }
         setToolbarTitle();
     }
@@ -188,7 +192,7 @@ public class BanksFragment extends Fragment implements CurrencyManager.Listener{
             setUpListView();
             banksData = banks;
         } else
-            CurrencyManager.with(this).updateBanks();
+            updateData();
     }
 
 
