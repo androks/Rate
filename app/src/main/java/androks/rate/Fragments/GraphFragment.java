@@ -1,5 +1,6 @@
 package androks.rate.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,9 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import androks.rate.Activities.MainActivity;
 import androks.rate.R;
@@ -30,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
@@ -91,7 +95,7 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
         if (averageData == null) {
             updateData();
         } else {
-            convertToFloat(averageData);
+            convertCurrenciesToFloat(averageData);
             generateData();
         }
     }
@@ -148,7 +152,7 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
             ((MainActivity) getActivity()).currentCurrency = Utils.CURRENCY_DOLLAR;
         }
         if (averageData != null) {
-            convertToFloat(averageData);
+            convertCurrenciesToFloat(averageData);
             generateData();
         } else {
             updateData();
@@ -168,8 +172,8 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
         Float[] temp = mValues;
 
         Arrays.sort(temp);
-        v.bottom =  temp[0] - (float) 0.1;
-        v.top = temp[temp.length - 1] + (float) 0.01;
+        v.bottom =  temp[0] - (float) 0.03;
+        v.top = temp[temp.length - 1] + (float) 0.05;
         v.left = 0;
         v.right = mNumberOfPoints-(float)0.8;
         mChart.setMaximumViewport(v);
@@ -184,9 +188,19 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
 
         ValueShape shape = ValueShape.CIRCLE;
 
+        List<AxisValue> axisDateValues = new ArrayList<>();
+        List<String> dates = new ArrayList<>(averageData.getDatesList(
+                new SimpleDateFormat("MM.dd",
+                        Locale.getDefault()
+                ))
+        );
         List<PointValue> values = new ArrayList<>();
         for(int i = 0; i<mNumberOfPoints; i++){
             values.add(new PointValue(i, mValues[i]));
+            if(mNumberOfPoints != mPeriods[2])
+                axisDateValues.add(new AxisValue((float) i, dates.get(i).toCharArray()));
+            else if(i%2 == 0)
+                axisDateValues.add(new AxisValue((float) i, dates.get(i).toCharArray()));
         }
 
         Line line = new Line(values);
@@ -203,9 +217,15 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
         lines.add(line);
         LineChartData data = new LineChartData(lines);
 
-        Axis axisY = new Axis().setHasLines(true);
-//        axisY.setName("Value");
+        Axis axisY = new Axis()
+                .setHasLines(true)
+                .setMaxLabelChars(7)
+                .setTextColor(Color.BLACK);
+
+        Axis axisX = new Axis(axisDateValues)
+                .setTextColor(Color.BLACK);
         data.setAxisYLeft(axisY);
+        data.setAxisXBottom(axisX);
 
         data.setBaseValue(Float.NEGATIVE_INFINITY);
         mChart.setValueSelectionEnabled(true);
@@ -215,7 +235,7 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
         hideProgress();
     }
 
-    private void convertToFloat(Average average) {
+    private void convertCurrenciesToFloat(Average average) {
         if (getActivity() != null) {
             String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
             int size = average.getAverageCurrencyListByPeriod(currentCurrency).size();
@@ -237,9 +257,9 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
     @Override
     public void onAverageReady(Average average) {
         if(average != null) {
-            convertToFloat(average);
-            generateData();
             averageData = average;
+            convertCurrenciesToFloat(average);
+            generateData();
         } else
             CurrencyManager.with(this).updateAverage();
     }
