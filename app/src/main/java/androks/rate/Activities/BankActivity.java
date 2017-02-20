@@ -44,7 +44,7 @@ public class BankActivity extends AppCompatActivity implements CurrencyManager.L
         setSupportActionBar(toolbar);
 
         mBankId = getIntent().getIntExtra(BANK_ID, 0);
-        toolbar.setTitle(Utils.getFriendlyBankTitle(getApplicationContext(), mBankId));
+        getSupportActionBar().setTitle(Utils.getFriendlyBankTitle(getApplicationContext(), mBankId));
 
         showProgress();
         updateData();
