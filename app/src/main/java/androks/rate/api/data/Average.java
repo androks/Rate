@@ -1,6 +1,8 @@
 package androks.rate.api.data;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,14 +32,21 @@ public class Average {
 
 	/**
 	 * Returns the list of dates
-	 * @return list of strings like "2017-02-18"
+	 * @return list of strings depend on SimpleDateFormat param
+	 * @param format
 	 */
-	public List<String> getDatesList() {
+	public List<String> getDatesList(SimpleDateFormat format) {
 		Set<String> datesSet = data.keySet();
 		List<String> datesList = new ArrayList<>();
 
 		for (String date: datesSet) {
-			datesList.add(date);
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(
+					Integer.parseInt(date.split("-")[0]),
+					Integer.parseInt(date.split("-")[1]),
+					Integer.parseInt(date.split("-")[2])
+			);
+			datesList.add(format.format(calendar.getTime()));
 		}
 
 		return datesList;

@@ -16,7 +16,7 @@ import java.util.List;
 
 import androks.rate.Fragments.AverageTodayFragment;
 import androks.rate.Fragments.BanksFragment;
-import androks.rate.Fragments.ByDatesFragment;
+import androks.rate.Fragments.GraphFragment;
 import androks.rate.R;
 import androks.rate.api.CurrencyManager;
 import androks.rate.api.Pair;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyManager.L
 
         todayFragment = new AverageTodayFragment();
         banksFragment = new BanksFragment();
-        byDatesFragment = new ByDatesFragment();
+        byDatesFragment = new GraphFragment();
 
 
         if (savedInstanceState != null) {
