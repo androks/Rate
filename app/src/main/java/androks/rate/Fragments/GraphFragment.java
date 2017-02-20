@@ -32,6 +32,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import lecho.lib.hellocharts.formatter.SimpleLineChartValueFormatter;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
@@ -172,7 +173,7 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
         Float[] temp = mValues;
 
         Arrays.sort(temp);
-        v.bottom =  temp[0] - (float) 0.03;
+        v.bottom =  temp[0] - (float) 0.05;
         v.top = temp[temp.length - 1] + (float) 0.05;
         v.left = 0;
         v.right = mNumberOfPoints-(float)0.8;
@@ -186,15 +187,16 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
             return;
         }
 
-        ValueShape shape = ValueShape.CIRCLE;
-
         List<AxisValue> axisDateValues = new ArrayList<>();
+
         List<String> dates = new ArrayList<>(averageData.getDatesList(
                 new SimpleDateFormat("MM.dd",
                         Locale.getDefault()
                 ))
         );
+
         List<PointValue> values = new ArrayList<>();
+
         for(int i = 0; i<mNumberOfPoints; i++){
             values.add(new PointValue(i, mValues[i]));
             if(mNumberOfPoints != mPeriods[2])
@@ -204,8 +206,9 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
         }
 
         Line line = new Line(values);
+        line.setFormatter(new SimpleLineChartValueFormatter(2));
         line.setColor(ChartUtils.COLOR_BLUE);
-        line.setShape(shape);
+        line.setShape(ValueShape.CIRCLE);
         line.setCubic(true);
         line.setFilled(false);
         line.setHasLabels(false);
@@ -219,7 +222,7 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
 
         Axis axisY = new Axis()
                 .setHasLines(true)
-                .setMaxLabelChars(7)
+                .setMaxLabelChars(6)
                 .setTextColor(Color.BLACK);
 
         Axis axisX = new Axis(axisDateValues)

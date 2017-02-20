@@ -32,7 +32,8 @@ public class Average {
 
 	/**
 	 * Returns the list of dates
-	 * @return list of strings like "2017-02-18"
+	 * @return list of strings depend on SimpleDateFormat param
+	 * @param format
 	 */
 	public List<String> getDatesList(SimpleDateFormat format) {
 		Set<String> datesSet = data.keySet();
@@ -40,14 +41,12 @@ public class Average {
 
 		for (String date: datesSet) {
 			Calendar calendar = Calendar.getInstance();
-			int year = Integer.parseInt(date.split("-")[0]);
-			int month = Integer.parseInt(date.split("-")[1]);
-			int day = Integer.parseInt(date.split("-")[2]);
-			calendar.set(year, month, day);
-			month = calendar.get(Calendar.MONTH);
-			day = calendar.get(Calendar.DAY_OF_MONTH);
-			String string = format.format(calendar.getTime());
-			datesList.add(string);
+			calendar.set(
+					Integer.parseInt(date.split("-")[0]),
+					Integer.parseInt(date.split("-")[1]),
+					Integer.parseInt(date.split("-")[2])
+			);
+			datesList.add(format.format(calendar.getTime()));
 		}
 
 		return datesList;
