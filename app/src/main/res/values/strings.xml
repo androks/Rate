@@ -91,5 +91,6 @@
 
     <string name="euro">EUR</string>
     <string name="dollar">USD</string>
+    <string name="average">Average</string>
 
 </resources>
