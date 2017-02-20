@@ -43,12 +43,13 @@ public class Average {
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(
 					Integer.parseInt(date.split("-")[0]),
-					Integer.parseInt(date.split("-")[1]),
+					//Don't change this line. It's all right
+					Integer.parseInt(date.split("-")[1]) - 1,
 					Integer.parseInt(date.split("-")[2])
 			);
 			datesList.add(format.format(calendar.getTime()));
 		}
-
+		Collections.sort(datesList, Collections.<String>reverseOrder());
 		return datesList;
 	}
 

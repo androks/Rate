@@ -47,17 +47,21 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by androks on 2/17/2017.
  */
 
-public class GraphFragment extends Fragment implements CurrencyManager.Listener{
+public class GraphFragment extends Fragment implements CurrencyManager.Listener {
 
     private Unbinder unbinder;
     private Float[] mValues;
     private Average averageData;
     private int mNumberOfPoints;
 
-    @BindView(R.id.chart) LineChartView mChart;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
-    @BindView(R.id.content) LinearLayout linearLayout;
-    @BindArray(R.array.periods_int) int[] mPeriods;
+    @BindView(R.id.chart)
+    LineChartView mChart;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.content)
+    LinearLayout linearLayout;
+    @BindArray(R.array.periods_int)
+    int[] mPeriods;
     Spinner spinner;
 
     @Override
@@ -173,10 +177,10 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
         Float[] temp = mValues;
 
         Arrays.sort(temp);
-        v.bottom =  temp[0] - (float) 0.05;
+        v.bottom = temp[0] - (float) 0.05;
         v.top = temp[temp.length - 1] + (float) 0.05;
         v.left = 0;
-        v.right = mNumberOfPoints-(float)0.8;
+        v.right = mNumberOfPoints - (float) 0.8;
         mChart.setMaximumViewport(v);
         mChart.setCurrentViewport(v);
 
@@ -189,19 +193,22 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
 
         List<AxisValue> axisDateValues = new ArrayList<>();
 
-        List<String> dates = new ArrayList<>(averageData.getDatesList(
-                new SimpleDateFormat("MM.dd",
-                        Locale.getDefault()
-                ))
+        List<String> dates = new ArrayList<>(
+                averageData.getDatesList(
+                        new SimpleDateFormat(
+                                "dd.M",
+                                Locale.getDefault()
+                        )
+                )
         );
 
         List<PointValue> values = new ArrayList<>();
 
-        for(int i = 0; i<mNumberOfPoints; i++){
+        for (int i = 0; i < mNumberOfPoints; i++) {
             values.add(new PointValue(i, mValues[i]));
-            if(mNumberOfPoints != mPeriods[2])
+            if (mNumberOfPoints != mPeriods[2])
                 axisDateValues.add(new AxisValue((float) i, dates.get(i).toCharArray()));
-            else if(i%2 == 0)
+            else if (i % 2 == 0)
                 axisDateValues.add(new AxisValue((float) i, dates.get(i).toCharArray()));
         }
 
@@ -243,7 +250,7 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
             String currentCurrency = ((MainActivity) getActivity()).currentCurrency;
             int size = average.getAverageCurrencyListByPeriod(currentCurrency).size();
             mValues = new Float[size];
-            for(int i = 0;i< size; i++){
+            for (int i = 0; i < size; i++) {
                 mValues[i] = average.getAverageCurrencyListByPeriod(currentCurrency)
                         .get(i)
                         .currencyType
@@ -259,7 +266,7 @@ public class GraphFragment extends Fragment implements CurrencyManager.Listener{
 
     @Override
     public void onAverageReady(Average average) {
-        if(average != null) {
+        if (average != null) {
             averageData = average;
             convertCurrenciesToFloat(average);
             generateData();
