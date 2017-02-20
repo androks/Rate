@@ -42,19 +42,18 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by androks on 2/17/2017.
  */
 
-public class ByDatesFragment extends Fragment implements CurrencyManager.Listener{
+public class GraphFragment extends Fragment implements CurrencyManager.Listener{
 
     private Unbinder unbinder;
     private Float[] mValues;
     private Average averageData;
+    private int mNumberOfPoints;
 
     @BindView(R.id.chart) LineChartView mChart;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.content) LinearLayout linearLayout;
     @BindArray(R.array.periods_int) int[] mPeriods;
     Spinner spinner;
-
-    private int mNumberOfPoints;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,11 +129,13 @@ public class ByDatesFragment extends Fragment implements CurrencyManager.Listene
     }
 
     private void showProgress() {
+        spinner.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
         linearLayout.setVisibility(View.GONE);
     }
 
     private void hideProgress() {
+        spinner.setEnabled(true);
         progressBar.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
     }

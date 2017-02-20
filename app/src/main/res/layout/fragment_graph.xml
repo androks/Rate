@@ -4,29 +4,37 @@
     android:layout_height="match_parent">
 
     <ProgressBar
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_centerInParent="true"
-            android:id="@+id/content">
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:gravity="end"
+                android:text="@string/average" />
 
             <lecho.lib.hellocharts.view.LineChartView
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
+                android:layout_gravity="center"
+                android:layout_height="400dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp" />
         </LinearLayout>
     </ScrollView>
 
